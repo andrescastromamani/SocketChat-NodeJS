@@ -1,3 +1,4 @@
+const User = require('../models/user');
 
 const getUsers = (req, res) => {
     const {nombre='not Name ', apellido} = req.query
@@ -8,12 +9,11 @@ const getUsers = (req, res) => {
     })
 }
 const postUsers = (req, res) => {
-    const {nombre, apellido} = req.body
-
+    const body = req.body
+    const user = new User(body);
+    user.save();
     res.json({
-        message: 'Hello from the server Controller post',
-        nombre,
-        apellido
+        user
     })
 }
 const putUsers = (req, res) => {
