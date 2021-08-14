@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const bcryptjs = require('bcryptjs');
 
 const getUsers = (req, res) => {
     const {nombre='not Name ', apellido} = req.query
@@ -9,8 +10,13 @@ const getUsers = (req, res) => {
     })
 }
 const postUsers = (req, res) => {
-    const body = req.body
-    const user = new User(body);
+    const {name, email, password, role} = req.body
+    const user = new User({name, email, password, role});
+    //Verify unique user
+
+    //Bcrypt password
+    const salt = bcryptjs.genSaltSync(10);
+    user.password = bcryptjs.hashSync(password, salt);
     user.save();
     res.json({
         user
