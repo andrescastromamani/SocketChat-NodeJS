@@ -22,11 +22,19 @@ const postUsers = async (req, res) => {
         user
     })
 }
-const putUsers = (req, res) => {
-    const id = req.params.id
+const putUsers = async(req, res) => {
+    const {id} = req.params;
+    const { password, email, google, ...rest } = req.body;
+    //validate with database
+    if(password){
+        //encrypt password
+        const salt = bcryptjs.genSaltSync(10);
+        rest.password = bcryptjs.hashSync(password, salt);
+    }
+    const user = await User.findByIdAndUpdate(id, rest);
     res.json({
         message: 'Hello from the server Controller put',
-        id
+        user
     })
 }
 const deleteUsers = (req, res) => {
