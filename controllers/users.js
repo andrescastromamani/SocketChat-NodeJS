@@ -1,13 +1,13 @@
 const User = require('../models/user');
 const bcryptjs = require('bcryptjs');
 
-const getUsers = (req, res) => {
-    const { nombre = 'not Name ', apellido } = req.query
-    res.json({
-        message: 'Hello from the server Controller get',
-        nombre,
-        apellido
-    })
+const getUsers = async(req, res) => {
+    //const { nombre = 'not Name ', apellido } = req.query
+    const {limit = 5, from = 0} = req.query;
+    const users = await User.find()
+    .skip(Number(from))
+    .limit(Number(limit));
+    res.json({users})
 }
 const postUsers = async (req, res) => {
 
@@ -18,9 +18,7 @@ const postUsers = async (req, res) => {
     const salt = bcryptjs.genSaltSync(10);
     user.password = bcryptjs.hashSync(password, salt);
     user.save();
-    res.json({
-        user
-    })
+    res.json(user)
 }
 const putUsers = async(req, res) => {
     const {id} = req.params;
@@ -32,10 +30,7 @@ const putUsers = async(req, res) => {
         rest.password = bcryptjs.hashSync(password, salt);
     }
     const user = await User.findByIdAndUpdate(id, rest);
-    res.json({
-        message: 'Hello from the server Controller put',
-        user
-    })
+    res.json(user)
 }
 const deleteUsers = (req, res) => {
     res.json({
