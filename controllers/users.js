@@ -10,7 +10,7 @@ const getUsers = async (req, res) => {
         .skip(Number(from))
         .limit(Number(limit));*/
     const [total, users] = await Promise.all([
-        User.count(query),
+        User.countDocuments(query),
         User.find(query)
             .skip(Number(from))
             .limit(Number(limit))
@@ -40,9 +40,13 @@ const putUsers = async (req, res) => {
     const user = await User.findByIdAndUpdate(id, rest);
     res.json(user)
 }
-const deleteUsers = (req, res) => {
+const deleteUsers = async(req, res) => {
+    const {id} = req.params;
+    //delete user completly
+    //const user = await User.findByIdAndRemove(id);
+    const user = await User.findByIdAndUpdate(id,{status: false});
     res.json({
-        message: 'Hello from the server Controller delete'
+        user
     })
 }
 
