@@ -24,7 +24,7 @@ const postUsers = async (req, res) => {
 }
 const putUsers = async(req, res) => {
     const {id} = req.params;
-    const { password, email, google, ...rest } = req.body;
+    const {_id, password, email, google, ...rest } = req.body;
     //validate with database
     if(password){
         //encrypt password
