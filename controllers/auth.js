@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const { generateJwt } = require('../helpers/generate-jwt');
 const User = require('../models/user');
 
 const login = async(req, res) => {
@@ -24,9 +25,12 @@ const login = async(req, res) => {
                 message: 'password not valid'
             });
         }
+        //Generate token
+        const token = await generateJwt(user.id);
 
         res.json({
-            message: 'Welcome to the API LOGIN'
+            user,
+            token
         });
 
     } catch (error) {
