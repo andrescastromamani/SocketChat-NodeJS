@@ -29,7 +29,6 @@ const validateJWT = async(req, res, next) => {
             message: 'Token not valid'
         });
     }
-    console.log(token);
 }
 
 module.exports = validateJWT;

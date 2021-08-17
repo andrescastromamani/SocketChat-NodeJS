@@ -42,13 +42,9 @@ const putUsers = async (req, res) => {
 }
 const deleteUsers = async(req, res) => {
     const {id} = req.params;
-    //delete user completly
-    //const user = await User.findByIdAndRemove(id);
     const user = await User.findByIdAndUpdate(id,{status: false});
-    const userAuth = req.user;
     res.json({
         user,
-        userAuth
     })
 }
 
