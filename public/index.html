@@ -31,7 +31,7 @@
             console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 
             let id_token = googleUser.getAuthResponse().id_token;
-            const data = { id_token: id_token };
+            const data = { id_token };
             fetch(url, {
                 method: 'POST',
                 headers: {'Content-type': 'application/json'},
@@ -39,7 +39,7 @@
             })
             .then(Response => Response.json())
             .then(data => console.log('My Server',data))
-            .catch(err => console.log(err));
+            .catch(console.log);
         }
         function signOut() {
             var auth2 = gapi.auth2.getAuthInstance();
