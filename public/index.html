@@ -19,7 +19,7 @@
 
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script>
-        var url = (window.location.hostname.includes('localhost'))
+        let url = (window.location.hostname.includes('localhost'))
             ? 'http://localhost:3000/api/auth/google'
             : 'https://acm-restserver-nodejs.herokuapp.com/api/auth/google';
 
@@ -34,12 +34,12 @@
             const data = { id_token };
             fetch(url, {
                 method: 'POST',
-                headers: {'Content-type': 'application/json'},
+                headers: { 'Content-type': 'application/json' },
                 body: JSON.stringify(data),
             })
-            .then(Response => Response.json())
-            .then(data => console.log('My Server',data))
-            .catch(console.log);
+                .then(Response => Response.json())
+                .then(data => console.log('My Server', data))
+                .catch(console.log);
         }
         function signOut() {
             var auth2 = gapi.auth2.getAuthInstance();
