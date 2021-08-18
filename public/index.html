@@ -19,12 +19,27 @@
 
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script>
+        var url = (window.location.hostname.includes('localhost'))
+            ? 'http://localhost:3000/api/auth/google'
+            : 'https://acm-restserver-nodejs.herokuapp.com/api/auth/google';
+
         function onSignIn(googleUser) {
             var profile = googleUser.getBasicProfile();
             console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
             console.log('Name: ' + profile.getName());
             console.log('Image URL: ' + profile.getImageUrl());
             console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+            let id_token = googleUser.getAuthResponse().id_token;
+            const data = { id_token: id_token };
+            fetch(url, {
+                method: 'POST',
+                headers: {'Content-type': 'application/json'},
+                body: JSON.stringify(data),
+            })
+            .then(Response => Response.json())
+            .then(data => console.log('My Server',data))
+            .catch(err => console.log(err));
         }
         function signOut() {
             var auth2 = gapi.auth2.getAuthInstance();
