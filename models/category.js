@@ -4,13 +4,14 @@ const CategorySchema = Schema({
     name:{
         type: String,
         required: true,
+        unique: true
     },
     status:{
         type: Boolean,
         default: true,
         required: true,
     },
-    created_at:{
+    user:{
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true,

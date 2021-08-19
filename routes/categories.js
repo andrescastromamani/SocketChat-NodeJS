@@ -1,6 +1,8 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
+const { createCategory } = require('../controllers/categories');
 const { validateFields } = require('../middlewares/validate-fields');
+const validateJWT = require('../middlewares/validate-jwt');
 
 const router = Router();
 
@@ -13,9 +15,11 @@ router.get('/:id',(req, res) => {
     res.json('get category by id');
 })
 //Add category
-router.post('/',(req, res) => {
-    res.json('add category');
-})
+router.post('/',[
+    validateJWT,
+    check('name','The name is required').not().isEmpty(),
+    validateFields
+],createCategory)
 //Update category
 router.put('/:id',(req, res) => {
     res.json('Update category');
