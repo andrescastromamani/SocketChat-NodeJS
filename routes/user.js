@@ -9,6 +9,7 @@ const { validateRole } = require('../middlewares/validate-role');
 const router = Router();
 
 router.get('/', getUsers)
+
 router.post('/', [
     check('name', 'name is required').notEmpty(),
     check('password', 'password is required and length min 6').isLength({ min: 6 }),
@@ -18,12 +19,14 @@ router.post('/', [
     check('role').custom(roleValidate),
     validateFields
 ], postUsers)
+
 router.put('/:id', [
     check('id', 'id is not valid').isMongoId(),
     check('id').custom(idExist),
     check('role').custom(roleValidate),
     validateFields
 ], putUsers)
+
 router.delete('/:id', [
     validateJWT,
     //verifyAdminRole,

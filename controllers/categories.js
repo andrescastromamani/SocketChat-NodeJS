@@ -45,11 +45,24 @@ const createCategory = async (req, res) => {
         message: 'Category created successfully'
     });
 }
+
 //Update Category
 const updateCategory = async (req, res) => {
     const { id } = req.params;
-    const { _id, ...rest } = req.body;
-    const category = await Category.findByIdAndUpdate(id, rest);
+    const { _id,status, user, ...data } = req.body;
+
+    data.name = data.name.toUpperCase();
+    data.user = req.user._id;
+    const category = await Category.findByIdAndUpdate(id, data, { new: true });
+    res.json({
+        category
+    });
+}
+
+//Delete Category
+const deleteCategory = async (req, res) => {
+    const { id } = req.params;
+    const category = await Category.findByIdAndUpdate(id, { status: false });
     res.json({
         category
     });
@@ -59,5 +72,6 @@ module.exports = {
     getCategories,
     getCategory,
     createCategory,
-    updateCategory
+    updateCategory,
+    deleteCategory
 }
