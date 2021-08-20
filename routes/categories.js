@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { createCategory, getCategories, updateCategory } = require('../controllers/categories');
+const { createCategory, getCategories, updateCategory, getCategory } = require('../controllers/categories');
 const { idExistCategory } = require('../helpers/db-validations');
 const { validateFields } = require('../middlewares/validate-fields');
 const validateJWT = require('../middlewares/validate-jwt');
@@ -10,9 +10,11 @@ const router = Router();
 //Get all categories
 router.get('/', getCategories)
 //Get category by id
-router.get('/:id', (req, res) => {
-    res.json('get category by id');
-})
+router.get('/:id',[
+    check('id','Id is not valid').isMongoId(),
+    check('id').custom(idExistCategory),
+    validateFields,
+], getCategory)
 //Add category
 router.post('/', [
     validateJWT,

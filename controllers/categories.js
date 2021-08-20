@@ -1,11 +1,12 @@
 const { Category } = require('../models');
-//Get Categpries
+//Get All Categpries
 const getCategories = async (req, res) => {
     const { limit = 10, from = 0 } = req.query
     const query = { status: true }
     const [total, categories] = await Promise.all([
         Category.countDocuments(query),
         Category.find(query)
+            .populate('user', 'name')
             .skip(Number(from))
             .limit(Number(limit))
     ])
@@ -14,7 +15,15 @@ const getCategories = async (req, res) => {
         categories
     });
 }
+
 //Get Category by Id
+const getCategory = async (req, res) => {
+    const { id } = req.params;
+    const category = await Category.findById(id).populate('user', 'name');
+    res.json({
+        category
+    })
+}
 
 //Create Category
 const createCategory = async (req, res) => {
@@ -48,6 +57,7 @@ const updateCategory = async (req, res) => {
 
 module.exports = {
     getCategories,
+    getCategory,
     createCategory,
     updateCategory
 }
