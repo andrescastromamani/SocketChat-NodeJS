@@ -1,38 +1,47 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { getProducts } = require('../controllers/products');
+const { getProducts, getProduct, createProduct, updateProduct, deleteProduct } = require('../controllers/products');
+const { idExistProduct, idExistCategory } = require('../helpers/db-validations');
+const { validateFields } = require('../middlewares/validate-fields');
+const validateJWT = require('../middlewares/validate-jwt');
+const { verifyAdminRole } = require('../middlewares/validate-role');
+
 const router = Router();
 
-//Get all categories
+//Get all products
 router.get('/', getProducts)
-/*
-//Get category by id
+
+//Get Product by id
 router.get('/:id', [
     check('id', 'Id is not valid').isMongoId(),
-    check('id').custom(idExistCategory),
+    check('id').custom(idExistProduct),
     validateFields,
-], getCategory)
+], getProduct)
 
-//Add category
+//Add Product
 router.post('/', [
     validateJWT,
-    check('name', 'The name is required').not().isEmpty(),
+    check('name', 'The name is required').notEmpty(),
+    check('category', 'is not id mongo').isMongoId(),
+    check('category').custom(idExistCategory),
     validateFields
-], createCategory)
+], createProduct)
 
 //Update category
 router.put('/:id', [
     validateJWT,
-    check('name', 'name is required').notEmpty(),
-    check('id').custom(idExistCategory),
+    check('id', 'Id is not valid').isMongoId(),
+    check('id').custom(idExistProduct),
     validateFields
-], updateCategory)
+], updateProduct) 
 
-//Get all categories
+//delete categorie
 router.delete('/:id', [
     validateJWT,
     verifyAdminRole,
     check('id', 'Id is not valid').isMongoId(),
-    check('id').custom(idExistCategory),
+    check('id').custom(idExistProduct),
     validateFields
-], deleteCategory)*/
+], deleteProduct)
+
+module.exports = router;
