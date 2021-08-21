@@ -36,13 +36,13 @@ const createCategory = async (req, res) => {
     }
     //Generate Data
     const data = {
-        name,
+        name:name.toUpperCase(),
         user: req.user._id
     }
     const category = new Category(data);
     category.save();
     res.status(201).json({
-        message: 'Category created successfully'
+        category
     });
 }
 
