@@ -36,10 +36,18 @@ const idExistProduct = async (id) => {
         throw new Error(`id ${id} not exist`);
     }
 }
+const permitCollections = (collection = '', collections = []) => {
+    const includeCollection = collections.includes(collection);
+    if (!includeCollection) {
+        throw new Error(`Collection ${collection} not exist`);
+    }
+    return true;
+}
 module.exports = {
     roleValidate,
     emailExist,
     idExist,
     idExistCategory,
-    idExistProduct
+    idExistProduct,
+    permitCollections
 }
