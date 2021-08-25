@@ -1,6 +1,9 @@
 const path = require('path');
 const fs = require('fs');
 
+const cloudinary = require('cloudinary').v2
+cloudinary.config(process.env.CLOUDINARY_URL);
+
 const { fileUpload } = require("../helpers");
 const { User, Product } = require("../models");
 
@@ -50,6 +53,36 @@ const updateImage = async (req, res) => {
     res.json({ model });
 }
 
+const updateImageCloudinary = async (req, res) => {
+    const { collection, id } = req.params;
+    let model;
+    switch (collection) {
+        case 'users':
+            model = await User.findById(id);
+            if (!model) {
+                res.status(400).json({ message: 'User not exist' });
+            }
+            break;
+        case 'products':
+            model = await Product.findById(id);
+            if (!model) {
+                res.status(400).json({ message: 'Product not exist' });
+            }
+            break;
+        default:
+            res.status(500).json({ message: 'Error Server' });
+    }
+    //Clear Files
+    if (model.image) {
+
+    }
+    const { tempFilePath } = req.files.file;
+    const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
+    model.image = secure_url;
+    await model.save();
+    res.json({ model });
+}
+
 const getImage = async (req, res) => {
     const { collection, id } = req.params;
     let model;
@@ -84,5 +117,6 @@ const getImage = async (req, res) => {
 module.exports = {
     uploadFiles,
     updateImage,
-    getImage
+    getImage,
+    updateImageCloudinary
 }
