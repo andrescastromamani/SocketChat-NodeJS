@@ -77,7 +77,8 @@ const getImage = async (req, res) => {
             return res.sendFile(filePath);
         }
     }
-    res.status(404).json({ message: 'Image not exist' });
+    const filePathImage = path.join(__dirname, '../assets', 'no-image.jpg');
+    return res.sendFile(filePathImage);
 }
 
 module.exports = {
