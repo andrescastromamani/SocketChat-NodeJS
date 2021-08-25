@@ -50,7 +50,38 @@ const updateImage = async (req, res) => {
     res.json({ model });
 }
 
+const getImage = async (req, res) => {
+    const { collection, id } = req.params;
+    let model;
+    switch (collection) {
+        case 'users':
+            model = await User.findById(id);
+            if (!model) {
+                res.status(400).json({ message: 'User not exist' });
+            }
+            break;
+        case 'products':
+            model = await Product.findById(id);
+            if (!model) {
+                res.status(400).json({ message: 'Product not exist' });
+            }
+            break;
+        default:
+            res.status(500).json({ message: 'Error Server' });
+    }
+    //Clear Files
+    if (model.image) {
+        //Delete File
+        const filePath = path.join(__dirname, '../uploads', collection, model.image);
+        if (fs.existsSync(filePath)) {
+            return res.sendFile(filePath);
+        }
+    }
+    res.status(404).json({ message: 'Image not exist' });
+}
+
 module.exports = {
     uploadFiles,
-    updateImage
+    updateImage,
+    getImage
 }
