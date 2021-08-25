@@ -1,3 +1,6 @@
+const path = require('path');
+const fs = require('fs');
+
 const { fileUpload } = require("../helpers");
 const { User, Product } = require("../models");
 
@@ -16,27 +19,35 @@ const uploadFiles = async (req, res) => {
 
 const updateImage = async (req, res) => {
     const { collection, id } = req.params;
-    let modelo;
+    let model;
     switch (collection) {
         case 'users':
-            modelo = await User.findById(id);
-            if (!modelo) {
+            model = await User.findById(id);
+            if (!model) {
                 res.status(400).json({ message: 'User not exist' });
             }
             break;
         case 'products':
-            modelo = await Product.findById(id);
-            if (!modelo) {
+            model = await Product.findById(id);
+            if (!model) {
                 res.status(400).json({ message: 'Product not exist' });
             }
             break;
         default:
             res.status(500).json({ message: 'Error Server' });
     }
+    //Clear Files
+    if (model.image) {
+        //Delete File
+        const filePath = path.join(__dirname, '../uploads', collection, model.image);
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
+    }
     const name = await fileUpload(req.files, undefined, collection);
-    modelo.image = name;
-    await modelo.save();
-    res.json({ modelo });
+    model.image = name;
+    await model.save();
+    res.json({ model });
 }
 
 module.exports = {
