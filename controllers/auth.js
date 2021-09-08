@@ -77,7 +77,17 @@ const googleSignIn = async (req, res) => {
         });
     }
 }
+const generateToken = async(req, res) => {
+    const { user } = req;
+    //Generate token
+    const token = await generateJwt(user.id);
+    res.json({
+        user,
+        token
+    })
+}
 module.exports = {
     login,
-    googleSignIn
+    googleSignIn,
+    generateToken
 }
