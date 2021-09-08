@@ -22,41 +22,18 @@
                 <a href="#" onclick="signOut();">Sign out</a>
             </div>
             <div class="col-12 col-md-6">
-
+                <h1>Login</h1>
+                <hr>
+                <form action="">
+                    <input type="text" class="form-control mt-2" placeholder="email" name="email">
+                    <input type="password" class="form-control mt-2" placeholder="password" name="password">
+                    <button type="submit" class="btn btn-primary mt-2 w-100">Sign in</button>
+                </form>
             </div>
         </div>
     </div>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <script>
-        let url = (window.location.hostname.includes('localhost'))
-            ? 'http://localhost:3000/api/auth/google'
-            : 'https://acm-restserver-nodejs.herokuapp.com/api/auth/google';
-
-        function onSignIn(googleUser) {
-            var profile = googleUser.getBasicProfile();
-            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-            console.log('Name: ' + profile.getName());
-            console.log('Image URL: ' + profile.getImageUrl());
-            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-
-            let id_token = googleUser.getAuthResponse().id_token;
-            const data = { id_token };
-            fetch(url, {
-                method: 'POST',
-                headers: { 'Content-type': 'application/json' },
-                body: JSON.stringify(data),
-            })
-                .then(Response => Response.json())
-                .then(data => console.log('My Server', data))
-                .catch(console.log);
-        }
-        function signOut() {
-            var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(function () {
-                console.log('User signed out.');
-            });
-        }
-    </script>
+    <script src="./js/auth.js"></script>
 </body>
 
 </html>
