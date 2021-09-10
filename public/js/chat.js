@@ -21,7 +21,6 @@ const validateJWT = async () => {
         headers: { 'x-token': token }
     })
     const { user: userDB, token: tokenDB } = await resp.json();
-    console.log(userDB, tokenDB);
     localStorage.setItem('token', tokenDB);
     user = userDB;
     document.title = user.name;
@@ -43,11 +42,11 @@ const connectSocket = async () => {
     socket.on('receive-message', () => {
 
     });
-    socket.on('active-users', () => {
-
+    socket.on('active-users', (payload) => {
+        console.log(payload);
     });
     socket.on('private-message', () => {
-        
+
     });
 }
 const main = async () => {
