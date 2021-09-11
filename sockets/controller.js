@@ -14,6 +14,8 @@ const socketController = async (socket = new Socket(), io) => {
     io.emit('active-users', chatMessages.usersList);
     socket.emit('receive-message', chatMessages.latestMessages);
 
+    //Socket New Meetup
+    socket.join(user.id);
     //Clean user disconnected
     socket.on('disconnect', () => {
         chatMessages.userDisconnect(user.id);
@@ -21,8 +23,13 @@ const socketController = async (socket = new Socket(), io) => {
     });
     //Receive message
     socket.on('send-message', ({ uid, message }) => {
-        chatMessages.sendMessage(user.id, user.name, message);
-        io.emit('receive-message', chatMessages.latestMessages);
+        if (uid) {
+            //Private Message
+            socket.to(uid).emit('private-message', { Message: user.name, message });
+        } else {
+            chatMessages.sendMessage(user.id, user.name, message);
+            io.emit('receive-message', chatMessages.latestMessages);
+        }
     })
 }
 

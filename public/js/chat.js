@@ -45,8 +45,8 @@ const connectSocket = async () => {
     socket.on('active-users', (payload) => {
         showUsers(payload);
     });
-    socket.on('private-message', () => {
-
+    socket.on('private-message', (payload) => {
+        console.log(payload);
     });
 }
 const showUsers = (users = []) => {
