@@ -43,11 +43,25 @@ const connectSocket = async () => {
 
     });
     socket.on('active-users', (payload) => {
-        console.log(payload);
+        showUsers(payload);
     });
     socket.on('private-message', () => {
 
     });
+}
+const showUsers = (users = []) => {
+    let usersHTML = '';
+    users.forEach(({ name, uid }) => {
+        usersHTML += `
+            <li>
+                <p>
+                    <h5 class="text-success">${name}</h5>
+                    <span class="badge badge-primary">${uid}</span>
+                </p>
+            </li>
+        `;
+    });
+    ulUsers.innerHTML = usersHTML;
 }
 const main = async () => {
     await validateJWT();
