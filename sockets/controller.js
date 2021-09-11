@@ -1,8 +1,8 @@
 const { Socket } = require("socket.io")
-const { tryJWT } = require("../helpers/generate-jwt")
+const { tryJWT } = require("../helpers")
 const { ChatMessages } = require("../models")
 
-const chatMessage = new ChatMessages();
+const chatMessages = new ChatMessages();
 
 const socketController = async (socket = new Socket(), io) => {
     const user = await tryJWT(socket.handshake.headers['x-token']);
@@ -10,13 +10,13 @@ const socketController = async (socket = new Socket(), io) => {
         return socket.disconnect();
     }
     //Add user connected
-    chatMessage.userConnect(user);
-    io.emit('active-users', chatMessage.usersList);
+    chatMessages.userConnect(user);
+    io.emit('active-users', chatMessages.usersList);
 
     //Clean user disconnected
     socket.on('disconnect', () => {
-        chatMessage.userDisconnect(user);
-        io.emit('active-users', chatMessage.usersList);
+        chatMessages.userDisconnect(user.id);
+        io.emit('active-users', chatMessages.usersList);
     });
 }
 

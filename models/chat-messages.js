@@ -1,5 +1,5 @@
-class Message{
-    constructor(uid, name, message){
+class Message {
+    constructor(uid, name, message) {
         this.uid = uid;
         this.name = name;
         this.message = message;
@@ -10,8 +10,9 @@ class ChatMessages {
         this.messages = [];
         this.users = {};
     }
+    //Latest 10 messages
     get latestMessages() {
-        this.messages = this.messages.slice(0, 10);
+        this.messages = this.messages.splice(0, 10);
         return this.messages;
     }
     get usersList() {
