@@ -40,7 +40,7 @@ const connectSocket = async () => {
         console.log('Disconnected');
     });
     socket.on('receive-message', (payload) => {
-        console.log(payload);
+        showMessages(payload);
     });
     socket.on('active-users', (payload) => {
         showUsers(payload);
@@ -62,6 +62,20 @@ const showUsers = (users = []) => {
         `;
     });
     ulUsers.innerHTML = usersHTML;
+}
+const showMessages = (messages = []) => {
+    let messagesHTML = '';
+    messages.forEach(({ name, message }) => {
+        messagesHTML += `
+            <li>
+                <p>
+                    <h5 class="badge badge-success">${name}</h5>
+                    <span class="">${message}</span>
+                </p>
+            </li>
+        `;
+    });
+    ulMessages.innerHTML = messagesHTML;
 }
 textMessage.addEventListener('keyup', ({ keyCode }) => {
     const message = textMessage.value;
